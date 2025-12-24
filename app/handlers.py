@@ -27,9 +27,7 @@ class NoteStates(StatesGroup):
 @router.message(CommandStart())
 async def cmd_start(message: Message):
     await message.answer(
-        'Привет! Я бот для заметок.\n\n'
-        'Я помогу тебе сохранять и управлять заметками.\n'
-        'Используй кнопки ниже или команду /help для помощи.',
+        'Привет! Я бот для заметок.\n\n' 'Я помогу тебе сохранять и управлять заметками.\n' 'Используй кнопки ниже или команду /help для помощи.',
         reply_markup=kb.main
     )
 
@@ -37,16 +35,7 @@ async def cmd_start(message: Message):
 @router.message(Command('help'))
 async def cmd_help(message: Message):
     help_text = (
-        'Справка по использованию бота:\n\n'
-        'Добавить заметку - создай новую заметку с возможностью установить напоминание\n'
-        'Мои заметки - посмотри все свои заметки\n'
-        'Удалить заметку - удали заметку по номеру\n'
-        'Удалить все заметки - удали все заметки сразу\n\n'
-        'При создании заметки можно установить время напоминания:\n'
-        'Формат: ДД.ММ.ГГГГ ЧЧ:ММ (например: 25.12.2024 15:30)\n'
-        'Или напиши "пропустить" чтобы сохранить без напоминания\n\n'
-        'Команды:\n'
-        '/start - начать работу\n'
+        'Справка по использованию бота:\n\n' 'Добавить заметку - создай новую заметку с возможностью установить напоминание\n' 'Мои заметки - посмотри все свои заметки\n' 'Удалить заметку - удали заметку по номеру\n' 'Удалить все заметки - удали все заметки сразу\n\n' 'При создании заметки можно установить время напоминания:\n' 'Формат: ДД.ММ.ГГГГ ЧЧ:ММ (например: 25.12.2024 15:30)\n' 'Или напиши "пропустить" чтобы сохранить без напоминания\n\n' 'Команды:\n' '/start - начать работу\n'
         '/help - показать эту справку'
     )
     await message.answer(help_text, reply_markup=kb.main)
@@ -88,7 +77,7 @@ async def show_notes(message: Message, state: FSMContext):
         notes_list = notes_storage[user_id]
         text = 'Твои заметки:\n\n'
         for note in notes_list:
-            note_text = f'#{note["id"]}: {note["text"]}'
+            note_text = f'{note["id"]}: {note["text"]}'
             if note.get('reminder_time') and not note.get('reminder_sent', False):
                 try:
                     reminder_dt = datetime.fromisoformat(note['reminder_time'])
@@ -117,7 +106,7 @@ async def delete_note_start(message: Message, state: FSMContext):
     notes_list = notes_storage[user_id]
     text = 'Твои заметки:\n\n'
     for note in notes_list:
-        note_text = f'#{note["id"]}: {note["text"]}'
+        note_text = f'{note["id"]}: {note["text"]}'
         if note.get('reminder_time') and not note.get('reminder_sent', False):
             try:
                 reminder_dt = datetime.fromisoformat(note['reminder_time'])
@@ -201,11 +190,7 @@ async def add_note_text(message: Message, state: FSMContext):
     
     await state.update_data(note_text=message.text)
     await message.answer(
-        'Заметка сохранена!\n\n'
-        'Хочешь установить время напоминания?\n'
-        'Напиши дату и время в формате: ДД.ММ.ГГГГ ЧЧ:ММ\n'
-        'Например: 25.12.2024 15:30\n\n'
-        'Или напиши "пропустить" чтобы сохранить без напоминания.'
+        'Заметка сохранена!\n\n' 'Хочешь установить время напоминания?\n' 'Напиши дату и время в формате: ДД.ММ.ГГГГ ЧЧ:ММ\n' 'Например: 25.12.2024 15:30\n\n' 'Или напиши "пропустить" чтобы сохранить без напоминания.'
     )
     await state.set_state(NoteStates.waiting_for_note_time)
 
@@ -232,25 +217,18 @@ async def add_note_time(message: Message, state: FSMContext):
             reminder_time = parse_datetime(message.text)
             if reminder_time <= datetime.now():
                 await message.answer(
-                    'Время напоминания должно быть в будущем!\n'
-                    'Попробуй еще раз или напиши "пропустить".'
+                    'Время напоминания должно быть в будущем!\n' 'Попробуй еще раз или напиши "пропустить".'
                 )
                 return
         except ValueError:
             await message.answer(
-                'Неверный формат времени!\n'
-                'Используй формат: ДД.ММ.ГГГГ ЧЧ:ММ\n'
-                'Например: 25.12.2024 15:30\n\n'
-                'Или напиши "пропустить" чтобы сохранить без напоминания.'
+                'Неверный формат времени!\n' 'Используй формат: ДД.ММ.ГГГГ ЧЧ:ММ\n' 'Например: 25.12.2024 15:30\n\n' 'Или напиши "пропустить" чтобы сохранить без напоминания.'
             )
             return
     
     note_id = len(notes_storage[user_id]) + 1
     notes_storage[user_id].append({
-        'id': note_id,
-        'text': note_text,
-        'reminder_time': reminder_time.isoformat() if reminder_time else None,
-        'reminder_sent': False
+        'id': note_id, 'text': note_text, 'reminder_time': reminder_time.isoformat() if reminder_time else None, 'reminder_sent': False
     })
     
     if reminder_time:
